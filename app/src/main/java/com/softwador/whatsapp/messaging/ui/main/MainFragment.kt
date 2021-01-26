@@ -36,12 +36,20 @@ class MainFragment : Fragment() {
     var urlPhonePrefix = "?phone=";
     var urlMessageTextPrefix = "&text=";
     var urlSuffix = "&app_absent=0";
+    var numberFromNotification = "";
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainPageViewModel = ViewModelProviders.of(this).get(MainPageViewModel::class.java).apply {
             setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
+        }
+        val string = getActivity()?.getIntent()?.getExtras()?.getString("numberFromNotification")
+//        val string = savedInstanceState?.getString("numberFromNotification")
+        println("numberFromNotification is - " + string)
+        if (null != string) {
+            numberFromNotification =
+                string
         }
     }
 
@@ -55,6 +63,10 @@ class MainFragment : Fragment() {
             container,
             false
         )
+
+        val phoneNumberView = root.findViewById<TextInputEditText>(R.id.phoneNumber);
+        phoneNumberView.setText(numberFromNotification)
+
         val textView: TextView =
             root.findViewById(com.softwador.whatsapp.messaging.R.id.section_label)
         mainPageViewModel.text.observe(this, Observer<String> {
@@ -230,5 +242,6 @@ class MainFragment : Fragment() {
                 }
             }
         }
+
     }
 }

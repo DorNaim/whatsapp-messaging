@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         PermissionUtils.verifyServicePermissions(this)
         startService(Intent(this, CallService::class.java))
         setContentView(R.layout.activity_main)
