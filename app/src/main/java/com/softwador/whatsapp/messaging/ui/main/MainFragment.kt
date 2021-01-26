@@ -7,7 +7,6 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -18,7 +17,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.*
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -30,9 +28,9 @@ import java.io.File
 /**
  * A placeholder fragment containing a simple view.
  */
-class PlaceholderFragment : Fragment() {
+class MainFragment : Fragment() {
 
-    private lateinit var pageViewModel: PageViewModel
+    private lateinit var mainPageViewModel: MainPageViewModel
 
     // Storage Permissions
     var REQUEST_EXTERNAL_STORAGE = 1;
@@ -46,9 +44,10 @@ class PlaceholderFragment : Fragment() {
     var urlMessageTextPrefix = "&text=";
     var urlSuffix = "&app_absent=0";
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pageViewModel = ViewModelProviders.of(this).get(PageViewModel::class.java).apply {
+        mainPageViewModel = ViewModelProviders.of(this).get(MainPageViewModel::class.java).apply {
             setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
         }
     }
@@ -57,6 +56,7 @@ class PlaceholderFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val root = inflater.inflate(
             com.softwador.whatsapp.messaging.R.layout.fragment_main,
             container,
@@ -64,15 +64,13 @@ class PlaceholderFragment : Fragment() {
         )
         val textView: TextView =
             root.findViewById(com.softwador.whatsapp.messaging.R.id.section_label)
-        pageViewModel.text.observe(this, Observer<String> {
+        mainPageViewModel.text.observe(this, Observer<String> {
             textView.text = it
         })
-
-
         //dor addition
         fun selectImage() {
             println("Ask for permissions")
-            verifyStoragePermissions(activity as Activity)
+            PermissionUtils.verifyStoragePermissions(activity as Activity)
             val options = arrayOf<CharSequence>("Choose from Gallery", "Cancel")
             val builder = AlertDialog.Builder(root.context)
             builder.setTitle("Add Photo!")
@@ -94,6 +92,7 @@ class PlaceholderFragment : Fragment() {
             })
             builder.show()
         }
+
 
         val addImageView = root.findViewById<ImageView>(R.id.AddImageBox);
         addImageView.setOnClickListener {
@@ -187,21 +186,6 @@ class PlaceholderFragment : Fragment() {
 
     }
 
-    fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap {
-        var width = image.width
-        var height = image.height
-
-        val bitmapRatio = width.toFloat() / height.toFloat()
-        if (bitmapRatio > 1) {
-            width = maxSize
-            height = (width / bitmapRatio).toInt()
-        } else {
-            height = maxSize
-            width = (height * bitmapRatio).toInt()
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
@@ -218,7 +202,7 @@ class PlaceholderFragment : Fragment() {
                 selectedImagePath = c!!.getString(columnIndex!!)
                 c?.close()
                 var thumbnail = BitmapFactory.decodeFile(selectedImagePath)
-                thumbnail = getResizedBitmap(thumbnail, 400)
+                thumbnail = ImageUtils.getResizedBitmap(thumbnail, 400)
                 println("image path - " + Uri.parse(selectedImagePath.toString()))
                 val addImageBoxView =
                     (context as Activity).findViewById<ImageView>(R.id.AddImageBox)
@@ -234,30 +218,6 @@ class PlaceholderFragment : Fragment() {
     }
 
 
-    /**
-     * Checks if the app has permission to write to device storage
-     *
-     * If the app does not has permission then the user will be prompted to grant permissions
-     *
-     * @param activity
-     */
-    fun verifyStoragePermissions(activity: Activity) {
-        // Check if we have write permission
-        val permission = ActivityCompat.checkSelfPermission(
-            activity,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        );
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(
-                activity,
-                PERMISSIONS_STORAGE,
-                REQUEST_EXTERNAL_STORAGE
-            );
-        }
-    }
-
     companion object {
         /**
          * The fragment argument representing the section number for this
@@ -270,8 +230,8 @@ class PlaceholderFragment : Fragment() {
          * number.
          */
         @JvmStatic
-        fun newInstance(sectionNumber: Int): PlaceholderFragment {
-            return PlaceholderFragment().apply {
+        fun newInstance(sectionNumber: Int): MainFragment {
+            return MainFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_SECTION_NUMBER, sectionNumber)
                 }
