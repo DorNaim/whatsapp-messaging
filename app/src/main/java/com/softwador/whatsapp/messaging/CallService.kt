@@ -1,9 +1,7 @@
 package com.softwador.whatsapp.messaging;
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.Service
+import android.app.*
+import android.app.Notification.EXTRA_NOTIFICATION_ID
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -17,6 +15,7 @@ import androidx.core.app.NotificationCompat.PRIORITY_MIN
 class CallService : Service() {
     private val NOTIF_CHANNEL_ID = 101
 
+    private val ACTION_STOP_SERVICE = "stopForegroundService"
 
     override fun onBind(p0: Intent?): IBinder? {
         TODO("Not yet implemented")
@@ -24,8 +23,16 @@ class CallService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // do your jobs here
-        startForeground()
-
+        println("onStartCommand!")
+        print("intent is: " + intent)
+        print("intent action is: " + intent!!.action)
+        if (ACTION_STOP_SERVICE.equals(intent!!.action)) {
+            println("onStartCommand trying to stop service")
+            stopForeground(true);
+            stopSelf();
+        } else {
+            startForeground()
+        }
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -39,12 +46,22 @@ class CallService : Service() {
                 ""
             }
 
+        val stopServiceIntent = Intent(this, CallService::class.java)
+        stopServiceIntent.action = ACTION_STOP_SERVICE
+        stopServiceIntent.putExtra(EXTRA_NOTIFICATION_ID, 0)
+        val pStopSelf =
+            PendingIntent.getService(this, 0, stopServiceIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
         val notification = notificationBuilder.setOngoing(true)
             .setSmallIcon(R.drawable.common_full_open_on_phone)
             .setPriority(PRIORITY_MIN)
             .setCategory(Notification.CATEGORY_SERVICE)
             .setContentTitle("Whatsapp messaging is waiting for calls")
+            .addAction(
+                R.attr.closeIcon, "Stop waiting for calls",
+                pStopSelf
+            )
             .build()
 
 //        android.os.Debug.waitForDebugger();  // this line is key

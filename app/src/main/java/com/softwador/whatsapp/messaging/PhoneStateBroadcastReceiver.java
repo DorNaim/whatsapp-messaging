@@ -3,10 +3,13 @@ package com.softwador.whatsapp.messaging;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import com.softwador.whatsapp.messaging.ui.main.NotificationSender;
 
@@ -35,6 +38,7 @@ public class PhoneStateBroadcastReceiver extends BroadcastReceiver {
 
         private static final String TAG = "PhoneStateListener";
 
+        @RequiresApi(api = Build.VERSION_CODES.R)
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
 
