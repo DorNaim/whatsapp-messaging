@@ -1,6 +1,5 @@
 package com.softwador.whatsapp.messaging.ui.main
 
-import android.Manifest
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
@@ -32,12 +31,6 @@ class MainFragment : Fragment() {
 
     private lateinit var mainPageViewModel: MainPageViewModel
 
-    // Storage Permissions
-    var REQUEST_EXTERNAL_STORAGE = 1;
-    var PERMISSIONS_STORAGE = arrayOf(
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
-    );
     var selectedImagePath = ""
     var url = "https://api.whatsapp.com/send/";
     var urlPhonePrefix = "?phone=";

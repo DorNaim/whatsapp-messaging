@@ -18,7 +18,7 @@ public class PhoneStateBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        System.out.println("Dor On Receive");
+        Log.v(TAG, "onReceive start");
         TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE); //TelephonyManager object
         CustomPhoneStateListener customPhoneListener = new CustomPhoneStateListener();
         telephony.listen(customPhoneListener, PhoneStateListener.LISTEN_CALL_STATE); //Register our listener with TelephonyManager
@@ -27,7 +27,7 @@ public class PhoneStateBroadcastReceiver extends BroadcastReceiver {
         incoming_number = bundle.getString("incoming_number");
         Log.v(TAG, "phoneNr: " + incoming_number);
         mContext = context;
-//        NotificationSender.Companion.sendNotification(mContext, "context registered");
+        Log.v(TAG, "onReceive end");
     }
 
     /* Custom PhoneStateListener */
@@ -37,7 +37,6 @@ public class PhoneStateBroadcastReceiver extends BroadcastReceiver {
 
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
-//            NotificationSender.Companion.sendNotification(mContext, "call state changed to: " + state);
 
             if (incomingNumber != null && incomingNumber.length() > 0)
                 incoming_number = incomingNumber;
@@ -65,14 +64,14 @@ public class PhoneStateBroadcastReceiver extends BroadcastReceiver {
                         prev_state = state;
                         //Answered Call which is ended
                         if (null != incoming_number) {
-                            NotificationSender.Companion.sendNotification(mContext, incoming_number);
+                            NotificationSender.Companion.sendFollowupNotification(mContext, incoming_number);
                         }
                     }
                     if ((prev_state == TelephonyManager.CALL_STATE_RINGING)) {
                         prev_state = state;
                         //Rejected or Missed call
                         if (null != incoming_number) {
-                            NotificationSender.Companion.sendNotification(mContext, incoming_number);
+                            NotificationSender.Companion.sendFollowupNotification(mContext, incoming_number);
                         }
                     }
                     break;

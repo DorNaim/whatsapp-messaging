@@ -18,8 +18,9 @@ class NotificationSender() {
         lateinit var builder: Notification.Builder
         private val channelId = "i.apps.notifications"
         private val description = "Whatsapp Messaging Notification"
+        private val notificationId = 1
 
-        fun sendNotification(context: Context?, number: String) {
+        fun sendFollowupNotification(context: Context?, number: String) {
 
             // it is a class to notify the user of events that happen.
             // This is how you tell the user that something has happened in the
@@ -36,21 +37,21 @@ class NotificationSender() {
                 notificationManager.createNotificationChannel(notificationChannel)
 
                 builder = Notification.Builder(context, channelId)
-                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setSmallIcon(R.drawable.common_full_open_on_phone)
                     .setLargeIcon(
                         BitmapFactory.decodeResource(
                             context.resources,
-                            R.drawable.ic_launcher_background
+                            R.drawable.common_full_open_on_phone
                         )
                     )
             } else {
 
                 builder = Notification.Builder(context)
-                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setSmallIcon(R.drawable.common_full_open_on_phone)
                     .setLargeIcon(
                         BitmapFactory.decodeResource(
                             context.resources,
-                            R.drawable.ic_launcher_background
+                            R.drawable.common_full_open_on_phone
                         )
                     )
 
@@ -59,7 +60,7 @@ class NotificationSender() {
             builder.setContentTitle("Followup with a whatsapp message")
             builder.setContentText(number)
             notificationManager.notify(
-                1234, builder.build()
+                notificationId, builder.build()
             )
         }
     }

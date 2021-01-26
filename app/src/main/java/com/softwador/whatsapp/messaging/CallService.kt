@@ -12,12 +12,10 @@ import android.os.IBinder
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MIN
-import com.softwador.whatsapp.messaging.R
 
 
 class CallService : Service() {
-    private val NOTIF_ID = 1
-    private val NOTIF_CHANNEL_ID = "Channel_Id"
+    private val NOTIF_CHANNEL_ID = 101
 
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -43,14 +41,14 @@ class CallService : Service() {
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
         val notification = notificationBuilder.setOngoing(true)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.common_full_open_on_phone)
             .setPriority(PRIORITY_MIN)
             .setCategory(Notification.CATEGORY_SERVICE)
             .setContentTitle("Whatsapp messaging is waiting for calls")
             .build()
 
 //        android.os.Debug.waitForDebugger();  // this line is key
-        startForeground(101, notification)
+        startForeground(NOTIF_CHANNEL_ID, notification)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
