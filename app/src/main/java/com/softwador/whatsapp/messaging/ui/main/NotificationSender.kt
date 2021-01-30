@@ -18,7 +18,7 @@ class NotificationSender() {
 
 
     companion object {
-        var lastNotificationNum = 1
+        var notificationId = 1
 
         // declaring variables
         lateinit var notificationManager: NotificationManager
@@ -26,13 +26,12 @@ class NotificationSender() {
         lateinit var builder: Notification.Builder
         private val channelId = "i.apps.notifications"
         private val description = "Whatsapp Messaging Notification"
-        private val notificationId = 1
 
         @RequiresApi(Build.VERSION_CODES.R)
         fun sendFollowupNotification(context: Context?, number: String) {
 
             //make sequental notificaitons
-            lastNotificationNum++
+            notificationId++
 
             // it is a class to notify the user of events that happen.
             // This is how you tell the user that something has happened in the
@@ -47,7 +46,7 @@ class NotificationSender() {
 //            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             notificationIntent.putExtra("numberFromNotification", number)
             val contentIntent = PendingIntent.getActivity(
-                context, lastNotificationNum,
+                context, notificationId,
                 notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT
             )
 
