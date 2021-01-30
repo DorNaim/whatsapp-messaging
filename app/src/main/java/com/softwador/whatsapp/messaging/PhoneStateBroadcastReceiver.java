@@ -18,6 +18,9 @@ public class PhoneStateBroadcastReceiver extends BroadcastReceiver {
     Context mContext;
     String incoming_number;
     private int prev_state;
+    //prevent double notification for same number
+    public static String lastPhoneNumForNotification = "";
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -68,13 +71,24 @@ public class PhoneStateBroadcastReceiver extends BroadcastReceiver {
                         prev_state = state;
                         //Answered Call which is ended
                         if (null != incoming_number) {
+                            if (lastPhoneNumForNotification.equals(incomingNumber)) {
+                                //stop execution
+                                return;
+                            }
+                            lastPhoneNumForNotification = incomingNumber;
                             NotificationSender.Companion.sendFollowupNotification(mContext, incoming_number);
+
                         }
                     }
                     if ((prev_state == TelephonyManager.CALL_STATE_RINGING)) {
                         prev_state = state;
                         //Rejected or Missed call
                         if (null != incoming_number) {
+                            if (lastPhoneNumForNotification.equals(incomingNumber)) {
+                                //stop execution
+                                return;
+                            }
+                            lastPhoneNumForNotification = incomingNumber;
                             NotificationSender.Companion.sendFollowupNotification(mContext, incoming_number);
                         }
                     }
