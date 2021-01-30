@@ -21,13 +21,12 @@
         android:id="@+id/phoneNumberWrapper"
         android:layout_width="300dp"
         android:layout_height="70dp"
-        android:nextFocusDown="@id/SendMessageButton"
-        app:layout_constraintBottom_toTopOf="@+id/SendMessageButton"
+        android:layout_marginTop="30dp"
+        android:nextFocusDown="@id/sendMessageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.19999999">
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/phoneNumber"
@@ -42,18 +41,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
+        android:id="@+id/messageWrapper"
 
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginBottom="44dp"
-        app:layout_constraintBottom_toTopOf="@+id/SendMessageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phoneNumberWrapper"
-        app:layout_constraintVertical_bias="0.100000024">
+        app:layout_constraintTop_toBottomOf="@+id/phoneNumberWrapper">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/messageText"
@@ -62,38 +57,113 @@
             android:hint="@string/messageText"
             android:imeOptions="actionSend"
             android:inputType="textMultiLine" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/patternUsage"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="@string/PatterUsage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/messageWrapper" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/CustomerNameWrapper"
+
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/patternUsage">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/customerName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/customerNameMessageText"
+            android:imeOptions="actionNext"
+            android:singleLine="true"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/JobDescriptionWrapper"
+
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CustomerNameWrapper">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/jobDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/JobDescriptionText"
+            android:imeOptions="actionNext"
+            android:singleLine="true"
+            android:inputType="textImeMultiLine" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/JobPriceWrapper"
+
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/removeImageBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/JobDescriptionWrapper"
+        app:layout_constraintVertical_bias="0.100000024">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/jobPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/JobPriceText"
+            android:imeOptions="actionSend"
+            android:singleLine="true"
+            android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
-        android:id="@+id/AddImageBox"
+        android:id="@+id/addImageBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:background="@android:drawable/editbox_background"
+        android:clickable="false"
         android:contentDescription="@string/uploadfile"
         android:src="@android:drawable/ic_input_add"
-        app:layout_constraintBottom_toTopOf="@+id/SendMessageButton"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/sendMessageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        app:layout_constraintVertical_bias="0.100000024" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/RemoveImageBox"
+        android:id="@+id/removeImageBox"
         android:layout_width="50dp"
         android:layout_height="30dp"
         android:contentDescription="@string/RemoveFile"
         android:src="@android:drawable/ic_delete"
-        app:layout_constraintBottom_toTopOf="@+id/SendMessageButton"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/sendMessageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AddImageBox"
+        app:layout_constraintTop_toBottomOf="@+id/addImageBox"
         app:layout_constraintVertical_bias="0.07999998" />
 
     <Button
-        android:id="@+id/SendMessageButton"
+        android:id="@+id/sendMessageButton"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:text="@string/SendMessageExplanation"
@@ -101,5 +171,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

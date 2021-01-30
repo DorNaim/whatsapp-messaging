@@ -3,6 +3,7 @@ package com.softwador.whatsapp.messaging.ui.main
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,7 +16,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.core.text.trimmedLength
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -32,11 +37,22 @@ class MainFragment : Fragment() {
     private lateinit var mainPageViewModel: MainPageViewModel
 
     var selectedImagePath = ""
-    var url = "https://api.whatsapp.com/send/";
-    var urlPhonePrefix = "?phone=";
-    var urlMessageTextPrefix = "&text=";
-    var urlSuffix = "&app_absent=0";
-    var numberFromNotification = "";
+    var url = "https://api.whatsapp.com/send/"
+    var urlPhonePrefix = "?phone="
+    var urlMessageTextPrefix = "&text="
+    var urlSuffix = "&app_absent=0"
+    var numberFromNotification = ""
+
+    //views and boxes
+    lateinit var phoneNumberView: TextInputEditText
+    lateinit var notImportantTextView: TextView
+    lateinit var addImageBox: ImageView
+    lateinit var removeImageBox: ImageView
+    lateinit var messageTextBox: TextInputEditText
+    lateinit var customerNameTextBox: TextInputEditText
+    lateinit var jobDescriptionTextBox: TextInputEditText
+    lateinit var jobPriceTextBox: TextInputEditText
+    lateinit var sendMessageButton: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,10 +64,10 @@ class MainFragment : Fragment() {
 //        val string = savedInstanceState?.getString("numberFromNotification")
         println("numberFromNotification is - " + string)
         if (null != string) {
-            numberFromNotification =
-                string
+            numberFromNotification = string
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,56 +80,39 @@ class MainFragment : Fragment() {
             false
         )
 
-        val phoneNumberView = root.findViewById<TextInputEditText>(R.id.phoneNumber);
+        //set views
+        phoneNumberView = root.findViewById<TextInputEditText>(R.id.phoneNumber);
+        notImportantTextView =
+            root.findViewById(com.softwador.whatsapp.messaging.R.id.section_label)
+        addImageBox = root.findViewById<ImageView>(R.id.addImageBox);
+        removeImageBox = root.findViewById<ImageView>(R.id.removeImageBox);
+        messageTextBox = root.findViewById<TextInputEditText>(R.id.messageText)
+        customerNameTextBox = root.findViewById<TextInputEditText>(R.id.customerName)
+        jobDescriptionTextBox = root.findViewById<TextInputEditText>(R.id.jobDescription)
+        jobPriceTextBox = root.findViewById<TextInputEditText>(R.id.jobPrice)
+        sendMessageButton = root.findViewById<Button>(R.id.sendMessageButton);
+        //////////////////////////////////////
+
+//        mainPageViewModel.text.observe(this, Observer<String> {
+//            notImportantTextView.text = it
+//        })
+
+        //dor addition stars here
         phoneNumberView.setText(numberFromNotification)
 
-        val textView: TextView =
-            root.findViewById(com.softwador.whatsapp.messaging.R.id.section_label)
-        mainPageViewModel.text.observe(this, Observer<String> {
-            textView.text = it
-        })
-        //dor addition
-        fun selectImage() {
-            println("Ask for permissions")
-            PermissionUtils.verifyStoragePermissions(activity as Activity)
-            val options = arrayOf<CharSequence>("Choose from Gallery", "Cancel")
-            val builder = AlertDialog.Builder(root.context)
-            builder.setTitle("Add Photo!")
-            builder.setItems(options, DialogInterface.OnClickListener { dialog, item ->
-                if (options[item] == "Take Photo") {
-                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    val f = File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg")
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f))
-                    startActivityForResult(intent, 1)
-                } else if (options[item] == "Choose from Gallery") {
-                    val intent = Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                    )
-                    startActivityForResult(intent, 2)
-                } else if (options[item] == "Cancel") {
-                    dialog.dismiss()
-                }
-            })
-            builder.show()
+        addImageBox.setOnClickListener {
+            selectImage(root.context)
         }
 
-
-        val addImageView = root.findViewById<ImageView>(R.id.AddImageBox);
-        addImageView.setOnClickListener {
-            selectImage()
-        }
-
-        val removeImageView = root.findViewById<ImageView>(R.id.RemoveImageBox);
-        removeImageView.setImageResource(android.R.color.transparent)
-        removeImageView.setOnClickListener {
+        removeImageBox.setImageResource(android.R.color.transparent)
+        removeImageBox.setOnClickListener {
             selectedImagePath = ""
-            addImageView.setImageBitmap(null)
-            addImageView.setImageResource(android.R.drawable.ic_input_add);
-            removeImageView.setImageResource(android.R.color.transparent)
+            addImageBox.setImageBitmap(null)
+            addImageBox.setImageResource(android.R.drawable.ic_input_add);
+            removeImageBox.setImageResource(android.R.color.transparent)
         }
 
-        val messageTextBox = root.findViewById<EditText>(R.id.messageText)
+
         messageTextBox.setImeOptions(EditorInfo.IME_ACTION_SEND)
         messageTextBox.setRawInputType(InputType.TYPE_CLASS_TEXT);
         messageTextBox.setOnEditorActionListener { v, actionId, event ->
@@ -126,8 +125,19 @@ class MainFragment : Fragment() {
             }
         }
 
-        val sendMessageButton = root.findViewById<Button>(R.id.SendMessageButton);
-        println("sendMessageButton is - " + sendMessageButton)
+
+        jobPriceTextBox.setImeOptions(EditorInfo.IME_ACTION_SEND)
+        jobPriceTextBox.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        jobPriceTextBox.setOnEditorActionListener { v, actionId, event ->
+            return@setOnEditorActionListener when (actionId) {
+                EditorInfo.IME_ACTION_SEND -> {
+                    sendMessage(root)
+                    true
+                }
+                else -> false
+            }
+        }
+
         sendMessageButton.setOnClickListener {
             println("url is - " + url)
             sendMessage(root)
@@ -136,16 +146,26 @@ class MainFragment : Fragment() {
     }
 
     fun sendMessage(view: View) {
+        var maxTrimLength = 1
         println("sendMessageButton pressed");
-        val phoneNumber = view.findViewById<TextInputEditText>(R.id.phoneNumber);
-        println("phoneNumber is - " + phoneNumber.getText())
-        var fixedPhoneNumber = "972+" + phoneNumber.getText()?.drop(1);
+        println("phoneNumber is - " + phoneNumberView.text)
+        var fixedPhoneNumber = "972+" + phoneNumberView.text?.drop(1);
+        var textForMessage = ""
+        //check if usign template
+        if (customerNameTextBox.text!!.trimmedLength() > maxTrimLength || customerNameTextBox.text!!.trimmedLength() > maxTrimLength || customerNameTextBox.text!!.trimmedLength() > maxTrimLength) {
+            //assume template is wanted
+            textForMessage = MessagingUtils.buildMessage(
+                customerNameTextBox.text.toString(),
+                jobDescriptionTextBox.text.toString(),
+                jobPriceTextBox.text.toString()
+            )
+        } else {
+            textForMessage = messageTextBox.text.toString()
+        }
 
-        val messageText = view.findViewById<TextInputEditText>(R.id.messageText);
-        println("text is - " + messageText.getText())
-
+        println("text is - " + textForMessage)
         val finalUrl =
-            url + urlPhonePrefix + fixedPhoneNumber + urlMessageTextPrefix + messageText.getText() + urlSuffix;
+            url + urlPhonePrefix + fixedPhoneNumber + urlMessageTextPrefix + textForMessage + urlSuffix;
         println("redirecting to url - " + finalUrl)
 
         if (null === selectedImagePath || "" == selectedImagePath) {
@@ -173,7 +193,7 @@ class MainFragment : Fragment() {
                     Intent.EXTRA_PHONE_NUMBER,
                     fixedPhoneNumber
                 );
-                i.putExtra(Intent.EXTRA_TEXT, messageText.getText().toString());
+                i.putExtra(Intent.EXTRA_TEXT, messageTextBox.getText().toString());
                 i.putExtra(Intent.EXTRA_STREAM, Uri.parse(selectedImagePath));
                 i.setType("image/jpeg");
                 i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -209,17 +229,38 @@ class MainFragment : Fragment() {
                 var thumbnail = BitmapFactory.decodeFile(selectedImagePath)
                 thumbnail = ImageUtils.getResizedBitmap(thumbnail, 400)
                 println("image path - " + Uri.parse(selectedImagePath.toString()))
-                val addImageBoxView =
-                    (context as Activity).findViewById<ImageView>(R.id.AddImageBox)
                 println("setting thumbnail")
-                addImageBoxView.setImageBitmap(thumbnail)
+                addImageBox.setImageBitmap(thumbnail)
                 println("set thumbnail")
-                val removeImageBoxView =
-                    (context as Activity).findViewById<ImageView>(R.id.RemoveImageBox)
-                removeImageBoxView.setImageResource(android.R.drawable.ic_delete)
+                removeImageBox.setImageResource(android.R.drawable.ic_delete)
 //                BitMapToString(thumbnail)
             }
         }
+    }
+
+    fun selectImage(context: Context) {
+        println("Ask for permissions")
+        PermissionUtils.verifyStoragePermissions(activity as Activity)
+        val options = arrayOf<CharSequence>("Choose from Gallery", "Cancel")
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Add Photo!")
+        builder.setItems(options, DialogInterface.OnClickListener { dialog, item ->
+            if (options[item] == "Take Photo") {
+                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                val f = File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg")
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f))
+                startActivityForResult(intent, 1)
+            } else if (options[item] == "Choose from Gallery") {
+                val intent = Intent(
+                    Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                )
+                startActivityForResult(intent, 2)
+            } else if (options[item] == "Cancel") {
+                dialog.dismiss()
+            }
+        })
+        builder.show()
     }
 
 

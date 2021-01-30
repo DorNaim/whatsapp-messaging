@@ -7,4 +7,8 @@
     <string name="messageText">טקסט מוכן מראש</string>
     <string name="uploadfile">הוסף קובץ</string>
     <string name="RemoveFile">הסר קובץ</string>
+    <string name="customerNameMessageText">שם הלקוח</string>
+    <string name="PatterUsage">שימוש בתבנית הודעה (לטקסט הכתוב בתיבה למעלה לא תהיה השפעה)</string>
+    <string name="JobDescriptionText">תיאור העבודה</string>
+    <string name="JobPriceText">מחיר</string>
 </resources>
