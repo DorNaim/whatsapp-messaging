@@ -14,7 +14,7 @@ import com.softwador.whatsapp.messaging.MainActivity
 import com.softwador.whatsapp.messaging.R
 
 
-class NotificationSender() {
+class NotificationSender {
 
 
     companion object {
@@ -41,8 +41,8 @@ class NotificationSender() {
 
             //set up intent to start when notification is pressed
             val notificationIntent = Intent(context, MainActivity::class.java)
-            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 //            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             notificationIntent.putExtra("numberFromNotification", number)
             val contentIntent = PendingIntent.getActivity(

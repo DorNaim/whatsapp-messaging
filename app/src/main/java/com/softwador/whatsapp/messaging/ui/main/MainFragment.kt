@@ -22,7 +22,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.text.trimmedLength
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.textfield.TextInputEditText
 import com.softwador.whatsapp.messaging.R
@@ -60,7 +59,7 @@ class MainFragment : Fragment() {
         mainPageViewModel = ViewModelProviders.of(this).get(MainPageViewModel::class.java).apply {
             setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
         }
-        val string = getActivity()?.getIntent()?.getExtras()?.getString("numberFromNotification")
+        val string = activity?.intent?.extras?.getString("numberFromNotification")
 //        val string = savedInstanceState?.getString("numberFromNotification")
         println("numberFromNotification is - " + string)
         if (null != string) {
@@ -81,16 +80,16 @@ class MainFragment : Fragment() {
         )
 
         //set views
-        phoneNumberView = root.findViewById<TextInputEditText>(R.id.phoneNumber);
+        phoneNumberView = root.findViewById<TextInputEditText>(R.id.phoneNumber)
         notImportantTextView =
             root.findViewById(com.softwador.whatsapp.messaging.R.id.section_label)
-        addImageBox = root.findViewById<ImageView>(R.id.addImageBox);
-        removeImageBox = root.findViewById<ImageView>(R.id.removeImageBox);
+        addImageBox = root.findViewById<ImageView>(R.id.addImageBox)
+        removeImageBox = root.findViewById<ImageView>(R.id.removeImageBox)
         messageTextBox = root.findViewById<TextInputEditText>(R.id.messageText)
         customerNameTextBox = root.findViewById<TextInputEditText>(R.id.customerName)
         jobDescriptionTextBox = root.findViewById<TextInputEditText>(R.id.jobDescription)
         jobPriceTextBox = root.findViewById<TextInputEditText>(R.id.jobPrice)
-        sendMessageButton = root.findViewById<Button>(R.id.sendMessageButton);
+        sendMessageButton = root.findViewById<Button>(R.id.sendMessageButton)
         //////////////////////////////////////
 
 //        mainPageViewModel.text.observe(this, Observer<String> {
@@ -108,13 +107,13 @@ class MainFragment : Fragment() {
         removeImageBox.setOnClickListener {
             selectedImagePath = ""
             addImageBox.setImageBitmap(null)
-            addImageBox.setImageResource(android.R.drawable.ic_input_add);
+            addImageBox.setImageResource(android.R.drawable.ic_input_add)
             removeImageBox.setImageResource(android.R.color.transparent)
         }
 
 
-        messageTextBox.setImeOptions(EditorInfo.IME_ACTION_SEND)
-        messageTextBox.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        messageTextBox.imeOptions = EditorInfo.IME_ACTION_SEND
+        messageTextBox.setRawInputType(InputType.TYPE_CLASS_TEXT)
         messageTextBox.setOnEditorActionListener { v, actionId, event ->
             return@setOnEditorActionListener when (actionId) {
                 EditorInfo.IME_ACTION_SEND -> {
@@ -126,8 +125,8 @@ class MainFragment : Fragment() {
         }
 
 
-        jobPriceTextBox.setImeOptions(EditorInfo.IME_ACTION_SEND)
-        jobPriceTextBox.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        jobPriceTextBox.imeOptions = EditorInfo.IME_ACTION_SEND
+        jobPriceTextBox.setRawInputType(InputType.TYPE_CLASS_TEXT)
         jobPriceTextBox.setOnEditorActionListener { v, actionId, event ->
             return@setOnEditorActionListener when (actionId) {
                 EditorInfo.IME_ACTION_SEND -> {
@@ -147,9 +146,9 @@ class MainFragment : Fragment() {
 
     fun sendMessage(view: View) {
         var maxTrimLength = 1
-        println("sendMessageButton pressed");
+        println("sendMessageButton pressed")
         println("phoneNumber is - " + phoneNumberView.text)
-        var fixedPhoneNumber = "972+" + phoneNumberView.text?.drop(1);
+        var fixedPhoneNumber = "972+" + phoneNumberView.text?.drop(1)
         var textForMessage = ""
         //check if usign template
         if (customerNameTextBox.text!!.trimmedLength() > maxTrimLength || customerNameTextBox.text!!.trimmedLength() > maxTrimLength || customerNameTextBox.text!!.trimmedLength() > maxTrimLength) {
@@ -165,15 +164,15 @@ class MainFragment : Fragment() {
 
         println("text is - " + textForMessage)
         val finalUrl =
-            url + urlPhonePrefix + fixedPhoneNumber + urlMessageTextPrefix + textForMessage + urlSuffix;
+            url + urlPhonePrefix + fixedPhoneNumber + urlMessageTextPrefix + textForMessage + urlSuffix
         println("redirecting to url - " + finalUrl)
 
-        if (null === selectedImagePath || "" == selectedImagePath) {
+        if ("" == selectedImagePath) {
             //send message no file to particular phone
             try {
                 val i = Intent(Intent.ACTION_VIEW)
-                i.setPackage("com.whatsapp");
-                i.setType("text/plain")
+                i.setPackage("com.whatsapp")
+                i.type = "text/plain"
                 i.data = Uri.parse(finalUrl)
                 startActivity(i)
             } catch (e: PackageManager.NameNotFoundException) {
@@ -188,14 +187,14 @@ class MainFragment : Fragment() {
             //send message with image but must choose contact
             try {
                 val i = Intent(Intent.ACTION_SEND, Uri.parse(finalUrl))
-                i.setPackage("com.whatsapp");
+                i.setPackage("com.whatsapp")
                 i.putExtra(
                     Intent.EXTRA_PHONE_NUMBER,
                     fixedPhoneNumber
-                );
-                i.putExtra(Intent.EXTRA_TEXT, messageTextBox.getText().toString());
-                i.putExtra(Intent.EXTRA_STREAM, Uri.parse(selectedImagePath));
-                i.setType("image/jpeg");
+                )
+                i.putExtra(Intent.EXTRA_TEXT, messageTextBox.text.toString())
+                i.putExtra(Intent.EXTRA_STREAM, Uri.parse(selectedImagePath))
+                i.type = "image/jpeg"
                 i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 //                i.data = Uri.parse(finalUrl)
                 startActivity(i)
@@ -217,15 +216,15 @@ class MainFragment : Fragment() {
             println("add image ok")
             if (requestCode === 2) {
                 println("add image result code 2")
-                val selectedImage = data?.getData()
+                val selectedImage = data?.data
                 val filePath = arrayOf(MediaStore.Images.Media.DATA)
                 println("got filePath - " + filePath.toString())
-                val c = (context as Activity).getContentResolver()
+                val c = (context as Activity).contentResolver
                     .query(selectedImage!!, filePath, null, null, null)
                 c?.moveToFirst()
                 val columnIndex = c?.getColumnIndex(filePath[0])
                 selectedImagePath = c!!.getString(columnIndex!!)
-                c?.close()
+                c.close()
                 var thumbnail = BitmapFactory.decodeFile(selectedImagePath)
                 thumbnail = ImageUtils.getResizedBitmap(thumbnail, 400)
                 println("image path - " + Uri.parse(selectedImagePath.toString()))

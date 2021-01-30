@@ -26,7 +26,7 @@ class CallService : Service() {
         println("onStartCommand!")
         print("intent is: " + intent)
         print("intent action is: " + intent!!.action)
-        if (ACTION_STOP_SERVICE.equals(intent!!.action)) {
+        if (ACTION_STOP_SERVICE.equals(intent.action)) {
             println("onStartCommand trying to stop service")
             stopForeground(true);
             stopSelf();
