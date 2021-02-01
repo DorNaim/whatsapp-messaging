@@ -1,15 +1,15 @@
 package com.softwador.whatsapp.messaging;
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.Service
+import android.app.*
+import android.app.Notification.EXTRA_NOTIFICATION_ID
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.PRIORITY_MIN
 
 
 class CallService : Service() {
@@ -45,27 +45,26 @@ class CallService : Service() {
                 // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
                 ""
             }
-        /***
+
         val stopServiceIntent = Intent(this, CallService::class.java)
         stopServiceIntent.action = ACTION_STOP_SERVICE
         stopServiceIntent.putExtra(EXTRA_NOTIFICATION_ID, 0)
         val pStopSelf =
-        PendingIntent.getService(this, 0, stopServiceIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+            PendingIntent.getService(this, 0, stopServiceIntent, PendingIntent.FLAG_CANCEL_CURRENT)
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
         val notification = notificationBuilder.setOngoing(true)
-        .setSmallIcon(R.drawable.common_full_open_on_phone)
-        .setPriority(PRIORITY_MIN)
-        .setCategory(Notification.CATEGORY_SERVICE)
-        .setContentTitle("Whatsapp messaging is waiting for calls")
-        .addAction(
-        R.attr.closeIcon, "Stop waiting for calls",
-        pStopSelf
-        )
-        .build()
+            .setSmallIcon(R.drawable.common_full_open_on_phone)
+            .setPriority(PRIORITY_MIN)
+            .setCategory(Notification.CATEGORY_SERVICE)
+            .setContentTitle("Whatsapp messaging is waiting for calls")
+            .addAction(
+                R.attr.closeIcon, "Stop waiting for calls",
+                pStopSelf
+            )
+            .build()
 
         startForeground(NOTIF_CHANNEL_ID, notification)
-         */
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
