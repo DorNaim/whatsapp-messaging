@@ -12,9 +12,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MIN
 
 
-class CallService : Service() {
+class CallServiceOld : Service() {
     private val NOTIF_CHANNEL_ID = 101
-
     private val ACTION_STOP_SERVICE = "stopForegroundService"
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -24,8 +23,8 @@ class CallService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // do your jobs here
         println("onStartCommand!")
-        print("intent is: " + intent)
-        print("intent action is: " + intent!!.action)
+        println("intent is: " + intent)
+        println("intent action is: " + intent!!.action)
         if (ACTION_STOP_SERVICE.equals(intent.action)) {
             println("onStartCommand trying to stop service")
             stopForeground(true);
@@ -33,7 +32,8 @@ class CallService : Service() {
         } else {
             startForeground()
         }
-        return super.onStartCommand(intent, flags, startId)
+        return START_STICKY
+//        return super.onStartCommand(intent, flags, startId)
     }
 
     private fun startForeground() {
@@ -46,7 +46,7 @@ class CallService : Service() {
                 ""
             }
 
-        val stopServiceIntent = Intent(this, CallService::class.java)
+        val stopServiceIntent = Intent(this, CallServiceOld::class.java)
         stopServiceIntent.action = ACTION_STOP_SERVICE
         stopServiceIntent.putExtra(EXTRA_NOTIFICATION_ID, 0)
         val pStopSelf =

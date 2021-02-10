@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         PermissionUtils.verifyServicePermissions(this)
-        startService(Intent(this, CallService::class.java))
+        startService(Intent(this, CallServiceOld::class.java))
         setContentView(R.layout.activity_main)
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         val viewPager: ViewPager = findViewById(R.id.view_pager)

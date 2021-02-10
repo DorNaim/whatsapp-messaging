@@ -18,7 +18,9 @@ class PermissionUtils {
         var PERMISSIONS_SERVICE = arrayOf(
             Manifest.permission.FOREGROUND_SERVICE,
             Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_CALL_LOG
+            Manifest.permission.READ_CALL_LOG,
+            Manifest.permission.WAKE_LOCK,
+            Manifest.permission.RECEIVE_BOOT_COMPLETED
         )
 
         fun verifyStoragePermissions(activity: Activity) {
@@ -54,7 +56,17 @@ class PermissionUtils {
                 Manifest.permission.READ_CALL_LOG
             )
 
-            if (foregroundServicePermission != PackageManager.PERMISSION_GRANTED || phoneStatePermission != PackageManager.PERMISSION_GRANTED || callLogPermission != PackageManager.PERMISSION_GRANTED) {
+            val wakeLockPermission = ActivityCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.WAKE_LOCK
+            )
+
+            val receiveBootPermission = ActivityCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.RECEIVE_BOOT_COMPLETED
+            )
+
+            if (foregroundServicePermission != PackageManager.PERMISSION_GRANTED || phoneStatePermission != PackageManager.PERMISSION_GRANTED || callLogPermission != PackageManager.PERMISSION_GRANTED || wakeLockPermission != PackageManager.PERMISSION_GRANTED || receiveBootPermission != PackageManager.PERMISSION_GRANTED) {
                 // We don't have permission so prompt the user
                 ActivityCompat.requestPermissions(
                     activity,

@@ -95,8 +95,7 @@ class MainFragment : Fragment() {
 //        mainPageViewModel.text.observe(this, Observer<String> {
 //            notImportantTextView.text = it
 //        })
-
-        //dor addition stars here
+        
         phoneNumberView.setText(numberFromNotification)
 
         addImageBox.setOnClickListener {
