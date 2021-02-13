@@ -14,6 +14,7 @@ class MessagingUtils {
         var DOT = "."
         var MESSAGE_END: String = "לשירותך בכל עת, \n" +
                 "מנעולן מיכאל נעים."
+        var PHONE_NUMBER: String = "0526723134"
 
         var BUSINESS_CARD_MESSAGE = "לקוח יקר! \n" +
                 "תודה שפנית אליי. \n" +
@@ -40,6 +41,8 @@ class MessagingUtils {
                 .append(JOB_PRICE_SUFFIX)
                 .append(NEW_LINE)
                 .append(MESSAGE_END)
+                .append(NEW_LINE)
+                .append(PHONE_NUMBER)
 
             return string.toString()
         }
