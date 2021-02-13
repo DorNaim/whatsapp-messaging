@@ -3,8 +3,8 @@ package com.softwador.whatsapp.messaging.ui.main
 class MessagingUtils {
     companion object {
 
+        var HEADER = "הצעת מחיר"
         var CUSTOMER_NAME_HEADER = "שם הלקוח: "
-        var HEADER = "כותרת: הצעת מחיר"
         var COMMA: String = ","
         var JOB_DESCRIPTION_HEADER: String = "עבור: "
         var JOB_PRICE_HEADER: String = "מחיר: "
@@ -15,7 +15,7 @@ class MessagingUtils {
         var MESSAGE_END: String = "לשירותך בכל עת, \n" +
                 "מנעולן מיכאל נעים."
 
-        var STAY_IN_TOUCH_MESSAGE = "לקוח יקר! \n" +
+        var BUSINESS_CARD_MESSAGE = "לקוח יקר! \n" +
                 "תודה שפנית אליי. \n" +
                 "אני מקווה שהצלחתי לעזור לך ולהעניק לך את היעוץ הטוב ביותר, \n" +
                 "אשמח לעמוד לשירותך גם בעתיד, \n" +
@@ -25,10 +25,11 @@ class MessagingUtils {
 
         fun buildMessage(name: String, jobDescription: String, jobPrice: String): String {
             val string: java.lang.StringBuilder = StringBuilder()
-            string.append(CUSTOMER_NAME_HEADER)
-                .append(name)
-                .append(NEW_LINE)
+            string
                 .append(HEADER)
+                .append(NEW_LINE)
+                .append(CUSTOMER_NAME_HEADER)
+                .append(name)
                 .append(NEW_LINE)
                 .append(JOB_DESCRIPTION_HEADER)
                 .append(jobDescription)

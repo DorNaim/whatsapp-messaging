@@ -3,6 +3,7 @@ package com.softwador.whatsapp.messaging.ui.main
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
+import android.app.NotificationManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -41,6 +42,8 @@ class MainFragment : Fragment() {
     var urlMessageTextPrefix = "&text="
     var urlSuffix = "&app_absent=0"
     var numberFromNotification = ""
+    var sendBusinessCardFromNotification = false;
+    var notificationId = -1
 
     //views and boxes
     lateinit var phoneNumberView: TextInputEditText
@@ -59,12 +62,30 @@ class MainFragment : Fragment() {
         mainPageViewModel = ViewModelProviders.of(this).get(MainPageViewModel::class.java).apply {
             setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
         }
-        val string = activity?.intent?.extras?.getString("numberFromNotification")
-//        val string = savedInstanceState?.getString("numberFromNotification")
-        println("numberFromNotification is - " + string)
-        if (null != string) {
-            numberFromNotification = string
+        val numberFromNotificationString =
+            activity?.intent?.extras?.getString("numberFromNotification")
+        var sendBusinessCardFromNotificationBool: Boolean? =
+            activity?.intent?.extras?.getBoolean("sendBusinessCardFromNotification")
+        val notificationIdInt: Int? =
+            activity?.intent?.extras?.getInt("notificationId")
+
+        println("numberFromNotificationString is - " + numberFromNotificationString)
+        println("sendBusinessCardFromNotification is - " + sendBusinessCardFromNotification)
+        if (null != sendBusinessCardFromNotificationBool) {
+            sendBusinessCardFromNotification = sendBusinessCardFromNotificationBool
         }
+        if (null != numberFromNotificationString) {
+            numberFromNotification = numberFromNotificationString
+        }
+        if (null != notificationIdInt) {
+            notificationId = notificationIdInt
+        }
+
+        val notificationManager =
+            activity!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        //notifications add 2 notifications ids, one for each action, so we make sure we close them both
+        notificationManager.cancel(notificationId)
+        notificationManager.cancel(notificationId + 1)
     }
 
 
@@ -95,9 +116,14 @@ class MainFragment : Fragment() {
 //        mainPageViewModel.text.observe(this, Observer<String> {
 //            notImportantTextView.text = it
 //        })
-        
+
         phoneNumberView.setText(numberFromNotification)
 
+        //send business card from notification
+        if (sendBusinessCardFromNotification) {
+            messageTextBox.setText(MessagingUtils.BUSINESS_CARD_MESSAGE)
+            sendMessage(root)
+        }
         addImageBox.setOnClickListener {
             selectImage(root.context)
         }
