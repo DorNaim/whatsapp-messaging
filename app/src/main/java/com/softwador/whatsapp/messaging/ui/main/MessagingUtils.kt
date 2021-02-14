@@ -21,7 +21,7 @@ class MessagingUtils {
                 "אני מקווה שהצלחתי לעזור לך ולהעניק לך את היעוץ הטוב ביותר, \n" +
                 "אשמח לעמוד לשירותך גם בעתיד, \n" +
                 "בברכה, \n" +
-                "מנעולן מיכאל נעים"
+                "מנעולן מיכאל נעים" + "\n" + PHONE_NUMBER
 
 
         fun buildMessage(name: String, jobDescription: String, jobPrice: String): String {
