@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Build
 
 
-class StartBroadcastReceiver : BroadcastReceiver() {
+class StartServiceBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val serviceIntent = Intent(context, CallServiceOld::class.java)
         serviceIntent.action = "START"

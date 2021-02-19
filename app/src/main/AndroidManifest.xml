@@ -38,7 +38,7 @@
                 <action android:name="android.intent.action.PHONE_STATE"></action>
             </intent-filter>
         </receiver>
-        <receiver android:name=".StartBroadcastReceiver">
+        <receiver android:name=".StartServiceBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
