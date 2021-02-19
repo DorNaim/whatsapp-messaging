@@ -10,12 +10,16 @@ import android.os.IBinder
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MIN
+import com.softwador.whatsapp.messaging.ui.main.ServiceUtils
 
 
 class CallServiceOld : Service() {
     private val NOTIF_CHANNEL_ID = 101
     private val ACTION_STOP_SERVICE = "stopForegroundService"
-    private var stopService = false;
+    companion object{
+        var stopService = false;
+    }
+
 
     override fun onBind(p0: Intent?): IBinder? {
         TODO("Not yet implemented")
@@ -26,15 +30,15 @@ class CallServiceOld : Service() {
         stopService = false
         println("onStartCommand!")
         println("intent is: " + intent)
-        println("intent action is: " + intent!!.action)
-        if (ACTION_STOP_SERVICE.equals(intent.action)) {
+        if (intent != null && ACTION_STOP_SERVICE.equals(intent.action)) {
+            println("intent action is: " + intent!!.action)
             println("onStartCommand trying to stop service")
             stopService = true
             stopForeground(true);
             stopSelf();
         } else {
             startForeground()
-            stopForeground(true);
+//            stopForeground(true);
         }
 
         return START_STICKY
@@ -89,32 +93,14 @@ class CallServiceOld : Service() {
     override fun onDestroy() {
         super.onDestroy()
         if (!stopService) {
-            stopForeground(true);
-            val serviceIntent = Intent(this, CallServiceOld::class.java)
-            serviceIntent.action = "START"
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                println("Starting the service in >=26 Mode from a BroadcastReceiver")
-                this.startForegroundService(serviceIntent)
-                return
-            }
-            println("Starting the service in < 26 Mode from a BroadcastReceiver")
-            this.startService(serviceIntent)
+            ServiceUtils.startServiceIfNotRunning(this, CallServiceOld::class.java)
         }
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
         if (!stopService) {
-            stopForeground(true);
-            val serviceIntent = Intent(this, CallServiceOld::class.java)
-            serviceIntent.action = "START"
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                println("Starting the service in >=26 Mode from a BroadcastReceiver")
-                this.startForegroundService(serviceIntent)
-                return
-            }
-            println("Starting the service in < 26 Mode from a BroadcastReceiver")
-            this.startService(serviceIntent)
+            ServiceUtils.startServiceIfNotRunning(this, CallServiceOld::class.java)
         }
     }
 }

@@ -22,7 +22,7 @@ public class PhoneStateBroadcastReceiver extends BroadcastReceiver {
     private int prev_state;
     //prevent double notification for same number
     public static String lastPhoneNumForNotification = "";
-    public static Calendar lastPhoneNumForNotificationDate;
+    public static Calendar lastPhoneNumForNotificationDate = Calendar.getInstance();
 
 
     @Override
