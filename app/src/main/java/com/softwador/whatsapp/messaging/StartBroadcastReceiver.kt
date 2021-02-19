@@ -12,8 +12,7 @@ class StartBroadcastReceiver : BroadcastReceiver() {
         serviceIntent.action = "START"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             println("Starting the service in >=26 Mode from a BroadcastReceiver")
-//                    context.startForegroundService(serviceIntent)
-            context.startService(serviceIntent)
+            context.startForegroundService(serviceIntent)
             return
         }
         println("Starting the service in < 26 Mode from a BroadcastReceiver")
