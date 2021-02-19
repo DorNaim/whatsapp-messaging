@@ -17,6 +17,6 @@ class StartServiceBroadcastReceiver : BroadcastReceiver() {
         }
         println("Starting the service in < 26 Mode from a BroadcastReceiver")
         context.startService(serviceIntent)
-
+        context.stopService(serviceIntent)
     }
 }

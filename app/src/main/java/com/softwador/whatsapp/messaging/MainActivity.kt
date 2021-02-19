@@ -32,11 +32,9 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             println("Starting the service in >=26 Mode from a BroadcastReceiver")
             this.startForegroundService(serviceIntent)
-            return
         }
         println("Starting the service in < 26 Mode from a BroadcastReceiver")
         this.startService(serviceIntent)
-
 
         setContentView(R.layout.activity_main)
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
@@ -52,24 +50,24 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        //start scheduled task
-        val myIntent = Intent(this, StartServiceBroadcastReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0)
-
-        val calendar: Calendar = Calendar.getInstance()
-        calendar.setTimeInMillis(System.currentTimeMillis())
-        calendar.add(Calendar.SECOND, 60) // first time
-
-        val frequency = (60 * 1000).toLong() // in ms
-
-        val alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.getTimeInMillis(),
-            frequency,
-            pendingIntent
-        )
+//        //start scheduled task
+//        val myIntent = Intent(this, StartServiceBroadcastReceiver::class.java)
+//        val pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0)
+//
+//        val calendar: Calendar = Calendar.getInstance()
+//        calendar.setTimeInMillis(System.currentTimeMillis())
+//        calendar.add(Calendar.SECOND, 60) // first time
+//
+//        val frequency = (60 * 1000).toLong() // in ms
+//
+//        val alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//
+//        alarmManager.setRepeating(
+//            AlarmManager.RTC_WAKEUP,
+//            calendar.getTimeInMillis(),
+//            frequency,
+//            pendingIntent
+//        )
 
     }
 

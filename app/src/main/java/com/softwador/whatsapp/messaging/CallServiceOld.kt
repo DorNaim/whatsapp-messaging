@@ -34,6 +34,7 @@ class CallServiceOld : Service() {
             stopSelf();
         } else {
             startForeground()
+            stopForeground(true);
         }
 
         return START_STICKY
@@ -88,6 +89,7 @@ class CallServiceOld : Service() {
     override fun onDestroy() {
         super.onDestroy()
         if (!stopService) {
+            stopForeground(true);
             val serviceIntent = Intent(this, CallServiceOld::class.java)
             serviceIntent.action = "START"
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -103,6 +105,7 @@ class CallServiceOld : Service() {
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
         if (!stopService) {
+            stopForeground(true);
             val serviceIntent = Intent(this, CallServiceOld::class.java)
             serviceIntent.action = "START"
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
