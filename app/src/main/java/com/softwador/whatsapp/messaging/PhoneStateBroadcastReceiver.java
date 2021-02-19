@@ -13,6 +13,8 @@ import androidx.annotation.RequiresApi;
 
 import com.softwador.whatsapp.messaging.ui.main.NotificationSender;
 
+import java.util.Calendar;
+
 public class PhoneStateBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = "PhoneStateReceiver";
     Context mContext;
@@ -20,6 +22,7 @@ public class PhoneStateBroadcastReceiver extends BroadcastReceiver {
     private int prev_state;
     //prevent double notification for same number
     public static String lastPhoneNumForNotification = "";
+    public static Calendar lastPhoneNumForNotificationDate;
 
 
     @Override
@@ -71,11 +74,12 @@ public class PhoneStateBroadcastReceiver extends BroadcastReceiver {
                         prev_state = state;
                         //Answered Call which is ended
                         if (null != incoming_number) {
-                            if (lastPhoneNumForNotification.equals(incomingNumber)) {
+                            if (lastPhoneNumForNotification.equals(incomingNumber) && !timePassedBetweenNotification()) {
                                 //stop execution
                                 return;
                             }
                             lastPhoneNumForNotification = incomingNumber;
+                            lastPhoneNumForNotificationDate = Calendar.getInstance();
                             NotificationSender.Companion.sendFollowupNotification(mContext, incoming_number);
 
                         }
@@ -84,16 +88,28 @@ public class PhoneStateBroadcastReceiver extends BroadcastReceiver {
                         prev_state = state;
                         //Rejected or Missed call
                         if (null != incoming_number) {
-                            if (lastPhoneNumForNotification.equals(incomingNumber)) {
+                            if (lastPhoneNumForNotification.equals(incomingNumber) && !timePassedBetweenNotification()) {
                                 //stop execution
                                 return;
                             }
                             lastPhoneNumForNotification = incomingNumber;
+                            lastPhoneNumForNotificationDate = Calendar.getInstance();
                             NotificationSender.Companion.sendFollowupNotification(mContext, incoming_number);
                         }
                     }
                     break;
             }
         }
+    }
+
+    private boolean timePassedBetweenNotification() {
+
+        Calendar now = Calendar.getInstance();
+
+        Calendar validDate = Calendar.getInstance();
+        validDate.setTime(lastPhoneNumForNotificationDate.getTime());
+        validDate.add(Calendar.SECOND, 1);
+
+        return now.after(validDate);
     }
 }
