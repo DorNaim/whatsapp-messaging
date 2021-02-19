@@ -89,7 +89,14 @@ class CallServiceOld : Service() {
         super.onDestroy()
         if (!stopService) {
             val serviceIntent = Intent(this, CallServiceOld::class.java)
-            startService(serviceIntent)
+            serviceIntent.action = "START"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                println("Starting the service in >=26 Mode from a BroadcastReceiver")
+                this.startForegroundService(serviceIntent)
+                return
+            }
+            println("Starting the service in < 26 Mode from a BroadcastReceiver")
+            this.startService(serviceIntent)
         }
     }
 
@@ -97,7 +104,14 @@ class CallServiceOld : Service() {
         super.onTaskRemoved(rootIntent)
         if (!stopService) {
             val serviceIntent = Intent(this, CallServiceOld::class.java)
-            startService(serviceIntent)
+            serviceIntent.action = "START"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                println("Starting the service in >=26 Mode from a BroadcastReceiver")
+                this.startForegroundService(serviceIntent)
+                return
+            }
+            println("Starting the service in < 26 Mode from a BroadcastReceiver")
+            this.startService(serviceIntent)
         }
     }
 }
