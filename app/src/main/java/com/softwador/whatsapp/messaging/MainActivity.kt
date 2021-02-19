@@ -31,4 +31,13 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        startService(Intent(this, CallServiceOld::class.java))
+    }
+    override fun onStop() {
+        super.onStop()
+        startService(Intent(this, CallServiceOld::class.java))
+    }
 }

@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat.PRIORITY_MIN
 class CallServiceOld : Service() {
     private val NOTIF_CHANNEL_ID = 101
     private val ACTION_STOP_SERVICE = "stopForegroundService"
+    private var stopService = false;
 
     override fun onBind(p0: Intent?): IBinder? {
         TODO("Not yet implemented")
@@ -22,16 +23,19 @@ class CallServiceOld : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // do your jobs here
+        stopService = false
         println("onStartCommand!")
         println("intent is: " + intent)
         println("intent action is: " + intent!!.action)
         if (ACTION_STOP_SERVICE.equals(intent.action)) {
             println("onStartCommand trying to stop service")
+            stopService = true
             stopForeground(true);
             stopSelf();
         } else {
             startForeground()
         }
+
         return START_STICKY
 //        return super.onStartCommand(intent, flags, startId)
     }
@@ -79,5 +83,21 @@ class CallServiceOld : Service() {
         val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         service.createNotificationChannel(chan)
         return channelId
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!stopService) {
+            val serviceIntent = Intent(this, CallServiceOld::class.java)
+            startService(serviceIntent)
+        }
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        if (!stopService) {
+            val serviceIntent = Intent(this, CallServiceOld::class.java)
+            startService(serviceIntent)
+        }
     }
 }
