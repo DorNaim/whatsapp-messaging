@@ -1,4 +1,4 @@
-package com.softwador.whatsapp.messaging;
+package com.softwador.whatsapp.messaging.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,7 +11,7 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import com.softwador.whatsapp.messaging.ui.main.NotificationSender;
+import com.softwador.whatsapp.messaging.utils.NotificationSender;
 
 import java.util.Calendar;
 

@@ -33,17 +33,17 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".PhoneStateBroadcastReceiver">
+        <receiver android:name=".receivers.PhoneStateBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE"></action>
             </intent-filter>
         </receiver>
-        <receiver android:name=".StartServiceBroadcastReceiver">
+        <receiver android:name=".receivers.StartServiceBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
         </receiver>
 
-        <service android:name=".CallServiceOld" />
+        <service android:name=".services.CallServiceOld" />
     </application>
 </manifest>

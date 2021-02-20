@@ -6,9 +6,10 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
-import com.softwador.whatsapp.messaging.ui.main.PermissionUtils
+import com.softwador.whatsapp.messaging.services.CallServiceOld
 import com.softwador.whatsapp.messaging.ui.main.SectionsPagerAdapter
-import com.softwador.whatsapp.messaging.ui.main.ServiceUtils
+import com.softwador.whatsapp.messaging.utils.PermissionUtils
+import com.softwador.whatsapp.messaging.utils.ServiceUtils
 
 
 class MainActivity : AppCompatActivity() {

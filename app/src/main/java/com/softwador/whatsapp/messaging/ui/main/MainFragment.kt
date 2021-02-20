@@ -26,6 +26,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.textfield.TextInputEditText
 import com.softwador.whatsapp.messaging.R
+import com.softwador.whatsapp.messaging.utils.ImageUtils
+import com.softwador.whatsapp.messaging.utils.MessagingUtils
+import com.softwador.whatsapp.messaging.utils.PermissionUtils
 import java.io.File
 
 

@@ -1,10 +1,9 @@
-package com.softwador.whatsapp.messaging.ui.main
+package com.softwador.whatsapp.messaging.utils
 
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import com.softwador.whatsapp.messaging.CallServiceOld
 
 
 class ServiceUtils {
@@ -13,7 +12,7 @@ class ServiceUtils {
 
         var REQUEST_EXTERNAL_STORAGE = 1
 
-        fun startServiceIfNotRunning(context: Context,serviceClass: Class<*>) {
+        fun startServiceIfNotRunning(context: Context, serviceClass: Class<*>) {
 
             val myServiceRunning = isMyServiceRunning(context, serviceClass)
 

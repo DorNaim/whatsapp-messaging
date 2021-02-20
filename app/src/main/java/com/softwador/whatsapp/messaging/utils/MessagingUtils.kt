@@ -1,4 +1,4 @@
-package com.softwador.whatsapp.messaging.ui.main
+package com.softwador.whatsapp.messaging.utils
 
 class MessagingUtils {
     companion object {

@@ -1,4 +1,4 @@
-package com.softwador.whatsapp.messaging;
+package com.softwador.whatsapp.messaging.services;
 
 import android.app.*
 import android.app.Notification.EXTRA_NOTIFICATION_ID
@@ -10,13 +10,15 @@ import android.os.IBinder
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MIN
-import com.softwador.whatsapp.messaging.ui.main.ServiceUtils
+import com.softwador.whatsapp.messaging.R
+import com.softwador.whatsapp.messaging.utils.ServiceUtils
 
 
 class CallServiceOld : Service() {
     private val NOTIF_CHANNEL_ID = 101
     private val ACTION_STOP_SERVICE = "stopForegroundService"
-    companion object{
+
+    companion object {
         var stopService = false;
     }
 
